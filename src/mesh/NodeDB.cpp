@@ -1041,6 +1041,12 @@ void NodeDB::installDefaultConfig(bool preserveKey = false)
     config.lora.sx126x_rx_boosted_gain = true;
     config.lora.tx_enabled =
         true; // FIXME: maybe false in the future, and setting region to enable it. (unset region forces it off)
+#if HAS_SERIAL_HAL_DEVICE && defined(SERIAL_HAL_ONLY_DEFAULT)
+    // Companion-modem variant: boot straight into SerialHal proxy mode so the native host can drive
+    // this board's radio over serial without a first-boot radio init. A user can still clear it via
+    // config if they want the node to run its own mesh stack instead.
+    config.lora.serial_hal_only = true;
+#endif
     config.lora.override_duty_cycle = false;
     config.lora.config_ok_to_mqtt = false;
 #if HAS_LORA_FEM
